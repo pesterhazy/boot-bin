@@ -21,7 +21,7 @@ echo -e "\033[0;33m<< Version: $VERSION >>\033[0m"; \
 
 # Build target/loader.jar which serves as foundation for boot.sh/exe
 
-javac -d target src/Boot.java src/boot/bin/ParentClassLoader.java
+javac -d target src/Boot.java src/boot/bin/ParentClassLoader.java src/boot/bin/BootSnapshotVersionFetcher.java
 cp -r resources/* target/
 jar cef Boot target/loader.jar -C target/ .
 

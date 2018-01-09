@@ -1,6 +1,7 @@
 // vim: et:ts=4:sw=4
 
 import boot.bin.ParentClassLoader;
+import boot.bin.BootSnapshotVersionFetcher;
 
 import java.io.*;
 import java.net.*;
@@ -182,7 +183,14 @@ public class Boot {
 
     public static String
     downloadUrl(String version, String name) throws Exception {
-        return String.format("https://github.com/boot-clj/boot/releases/download/%s/%s", version, name); }
+        if (0 < version.compareTo("2.8") && name.equals("boot.jar")) {
+            String urlFormat = "https://clojars.org/repo/boot/base/%s/base-%s-uber.jar";
+            if (version.endsWith("SNAPSHOT")) {
+                return String.format(urlFormat, version, BootSnapshotVersionFetcher.lastSnapshot(version)); }
+            else {
+                return String.format(urlFormat, version, version); }
+        } else { // 2.7.2 and lower download releases from github
+            return String.format("https://github.com/boot-clj/boot/releases/download/%s/%s", version, name); }}
 
     public static File
     validateBinaryFile(File f) throws Exception {
